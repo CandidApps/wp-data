@@ -24,10 +24,14 @@ define('WP_SQL_DIR', 'sql-dump');
 require('./wp-blog-header.php');
 
 
-
 echo "\n";
 
-// Listen out for what command is requested
+
+/**
+ * Command options
+ *
+ * Listen out for what command is requested and execute the function
+ */
 switch ($argv[1]) {
 
     case 'export':
@@ -94,7 +98,7 @@ function import () {
     $shell = 'mysql -u '.DB_USER.' -p '.DB_NAME.' < '.$sql_dir.'/'.$file_name;
 
     echo 'Importing latest data for "'.get_bloginfo('name').'"'."\n";
-    echo "- Import $sql_dir/$file_name? Enter password to confirm\n";
+    echo '- Import '.$sql_dir.'/'.$file_name.'? Enter password to confirm'."\n";
     echo shell_exec($shell);
 
 }
