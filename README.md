@@ -12,10 +12,12 @@ Usage
 ------------------------------------------------------------------------------
 
 Drop the file into the root of your WordPress setup. In the terminal, head to
-the root where drop the file and you execute the following commands
+the root where drop the file and you execute the following commands.
+
+Export the whole database
 
     php wp-data export
+    
+Import the exported data
 
     php wp-data import
-    
-It should be pretty obvious what does what...
