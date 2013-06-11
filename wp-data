@@ -1,0 +1,97 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Tells WordPress to load the WordPress theme and output it.
+ * @var  bool
+ */
+define('WP_USE_THEMES', false);
+
+
+define('WP_SQL_DIR', 'sql-dump');
+
+
+/** 
+ * Loads the WordPress Environment and Template
+ *
+ * If you use a different enviroment setup then you will neeed to change this
+ * setting.
+ */
+require('./wp/wp-blog-header.php');
+
+
+
+
+echo "\n";
+
+// Listen out for what command is requested
+switch ($argv[1]) {
+
+    case 'export':
+        export();
+    break;
+    
+    case 'import':
+        import();
+    break;
+
+    default:
+        echo 'Eh? "'.$argv[1].'"?';
+
+}
+
+echo "\n";
+
+
+/*****************************************************************************/
+
+
+/**
+ * Does a mysqldump of the table and saves it to a file.
+ */
+function export () {
+
+    $datetime = date('Y-m-d-H-i-s')
+    $shell = 'mysqldump -u '.DB_USER.' -p '.DB_NAME.' > '.WP_SQL_DIR.'/'.$datetime.'sql';
+
+    echo 'Exporting blog database "'.get_bloginfo('name').'"'."\n";
+    echo shell_exec($shell);
+    echo '- Exported '.WP_SQL_DIR.'/'.$datetime.'.sql'."\n";
+
+}
+
+
+/**
+ * Finds the latest file in the directory and attempts to import it.
+ * @todo   Pass
+ */
+function import () {
+
+    $pattern = '\.(sql)$';
+    $newstamp = 0;
+    $newname = '';
+    $dc = opendir(WP_SQL_DIR);
+
+    while ($fn = readdir($dc)) {
+        
+        # Eliminate current directory, parent directory
+        if (ereg('^\.{1,2}$',$fn)) 
+            continue;
+        
+        # Eliminate other pages not in pattern
+        if (! ereg($pattern,$fn)) 
+            continue;
+
+        $timedat = filemtime(WP_SQL_DIR.'/'.$fn);
+        if ($timedat > $newstamp)
+            $file_name = $fn;
+
+    }
+
+    $shell = 'mysql -u '.DB_USER.' -p '.DB_NAME.' < '.$sql_dir.'/'.$file_name;
+
+    echo 'Importing latest data for "'.get_bloginfo('name').'"'."\n";
+    echo "- Import $sql_dir/$file_name? Enter password to confirm\n";
+    echo shell_exec($shell);
+
+}
