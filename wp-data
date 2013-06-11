@@ -8,6 +8,10 @@
 define('WP_USE_THEMES', false);
 
 
+/**
+ * Directory where you want your SQL files stored.
+ * @var  string
+ */
 define('WP_SQL_DIR', 'sql-dump');
 
 
@@ -17,8 +21,7 @@ define('WP_SQL_DIR', 'sql-dump');
  * If you use a different enviroment setup then you will neeed to change this
  * setting.
  */
-require('./wp/wp-blog-header.php');
-
+require('./wp-blog-header.php');
 
 
 
